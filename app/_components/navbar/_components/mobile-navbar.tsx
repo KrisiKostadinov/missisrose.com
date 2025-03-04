@@ -3,12 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { DeleteIcon, MenuIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { ClientIcon } from "@/components/client-icon";
 import { NavbarItem } from "@/app/_components/navbar/_data";
 import { Separator } from "@/components/ui/separator";
-import { DeleteIcon, MenuIcon } from "lucide-react";
 
 type Props = {
   categoriesItems: NavbarItem[];

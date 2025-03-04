@@ -18,7 +18,7 @@ export default function DesktopNavbarIcons({ iconsItems }: Props) {
     <nav className="text-lg flex items-center gap-2">
       {iconsItems.map((navbarItem, index) => (
         <Link
-          href={"/cart"}
+          href={navbarItem.href}
           className={cn(
             "flex flex-col items-center rounded py-2.5 px-5 hover:text-white hover:bg-primary duration-100",
             pathname === "/cart" && "text-white bg-primary"
