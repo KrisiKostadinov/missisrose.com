@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
-import { FormSchema, formSchema } from "@/app/auth/register/_schema";
+import { FormSchema, formSchema } from "@/app/auth/login/_schema";
 import {
   Form,
   FormControl,
@@ -23,7 +23,7 @@ import { Separator } from "@/components/ui/separator";
 import PageLink from "@/app/_components/page-link";
 import PageButton from "@/app/_components/page-button";
 
-export default function RegisterForm() {
+export default function LoginForm() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const form = useForm<FormSchema>({
@@ -31,15 +31,14 @@ export default function RegisterForm() {
     defaultValues: {
       email: "",
       password: "",
-      name: "",
     },
   });
 
   const onSubmit = async (values: FormSchema) => {
     try {
       setLoading(true);
-      await axios.post("/api/auth/register", values);
-      router.push("/auth/login");
+      await axios.post("/api/auth/login", values);
+      router.push("/");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message);
@@ -53,7 +52,7 @@ export default function RegisterForm() {
 
   return (
     <AuthWrapper>
-      <h1 className="text-2xl font-semibold">Създаване на нов профил</h1>
+      <h1 className="text-2xl font-semibold">Влизане в профила</h1>
       <Separator className="my-5" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -72,9 +71,8 @@ export default function RegisterForm() {
                   />
                 </FormControl>
                 <FormDescription>
-                  След като потвърдите регистрацията си, ще получите имейл
-                  съобщение на посочения имейл адрес, за да потвърдите профила
-                  си.
+                  Въведете имейл адресът, с който сте създали профила си в този
+                  онлайн магазин.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -89,62 +87,31 @@ export default function RegisterForm() {
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder="Въведете сигурна парола"
+                    placeholder="Въведете паролата си"
                     {...field}
                     disabled={loading}
                   />
                 </FormControl>
                 <FormDescription>
-                  Препоръчително е да създадете сигурна парола, за да
-                  предотвратите неоторизирана активност в профила си.
+                  Въведете паролата за сигурност, с която сте създали профила си
+                  в този онлайн магазин. Ако сте забравили паролата си, можете
+                  да я смените от линкът за смяна на паролата в долната част на
+                  тази секция.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Име</FormLabel>
-                <FormControl>
-                  <Input
-                    type="name"
-                    placeholder="Въведете името и фамилията си"
-                    {...field}
-                    disabled={loading}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Можете да промените това поле от профила си, след като
-                  завършите регистрацията и потвърдите профила си.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div>
-            Ако натиснете бутона за създаване на нов потребител, Вие се
-            съгласявате с нашите{" "}
-            <PageLink name="Общи условия" href="/terms" target="_blank" /> и{" "}
-            <PageLink
-              name="Политика на поверителност"
-              href="/privacy-policy"
-              target="_blank"
-            />
-            .
-          </div>
           <div>
             <PageButton
-              name="Създаване на профила"
+              name="Влизане в профила"
               icon="SaveIcon"
               disabled={loading}
             />
             <Separator className="my-5" />
             <PageLink
-              name="Влизане в профила"
-              href="/auth/login"
+              name="Забравена парола"
+              href="/auth/forgot-password"
               target="_self"
             />
           </div>
