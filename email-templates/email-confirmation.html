@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="bg">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Потвърждение на имейл</title>
+
+    <style>
+      .container {
+        max-width: 600px !important;
+        margin: 40px auto !important;
+        padding: 1rem 2rem !important;
+        border-radius: 10px !important;
+        box-shadow: 0 0 20px #00000011 !important;
+        font-size: 18px !important;
+        line-height: 1.5 !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+        line-height: 1.5 !important;
+      }
+      a {
+        text-decoration: none !important;
+        border: none !important;
+        border-radius: 5px !important;
+        padding: 1rem 1.5rem !important;
+        background-color: #ff3131 !important;
+        color: #ffffff !important;
+        display: inline-block !important;
+        margin: 20px 0;
+      }
+      .text-center {
+        text-align: center;
+      }
+      ul {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Потвърждение на имейл</h1>
+      <p>
+        Благодарим Ви, че се регистрирахте в нашия онлайн магазин! Можете да
+        потвърдите своя имейл адрес от линкът по-долу.
+      </p>
+      <div class="text-center">
+        <a href="{{link}}">Потвърждение на имейл</a>
+      </div>
+      <ul>
+        <li>{{support_phone}}</li>
+        <li>{{support_email}}</li>
+      </ul>
+    </div>
+  </body>
+</html>
