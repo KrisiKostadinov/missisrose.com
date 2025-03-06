@@ -5,12 +5,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { FormSchema, formSchema } from "@/app/auth/password-reset/_schema";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,8 +22,13 @@ import { Separator } from "@/components/ui/separator";
 import PageLink from "@/app/_components/page-link";
 import PageButton from "@/app/_components/page-button";
 
-export default function PasswordResetForm() {
+type Props = {
+  token: string;
+}
+
+export default function PasswordResetForm({ token }: Props) {
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,8 +40,9 @@ export default function PasswordResetForm() {
   const onSubmit = async (values: FormSchema) => {
     try {
       setLoading(true);
-      await axios.post("/api/auth/password-reset", values);
+      await axios.post("/api/auth/password-reset", { ...values, token });
       toast.success("Паролата беше променена.");
+      router.push("/auth/login");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message);
@@ -74,7 +80,7 @@ export default function PasswordResetForm() {
           />
           <FormField
             control={form.control}
-            name="password"
+            name="cpassword"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Потвърдете на паролата</FormLabel>

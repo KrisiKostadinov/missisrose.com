@@ -16,7 +16,7 @@ export default async function PasswordResetPage({ searchParams }: Props) {
     where: { forgotPasswordToken: awaitedParams.token as string }
   });
 
-  if (!user || !user.forgotPasswordToken) {
+  if (!user || !user.forgotPasswordToken || !awaitedParams.token) {
     return redirect("/");
   }
 
@@ -29,7 +29,7 @@ export default async function PasswordResetPage({ searchParams }: Props) {
   return (
     <>
       <Header />
-      <PasswordResetForm />
+      <PasswordResetForm token={awaitedParams.token as string} />
     </>
   );
 }
