@@ -8,8 +8,8 @@ import MobileNavbar from "@/app/_components/navbar/_components/mobile-navbar";
 
 export default function Navbar() {
   return (
-    <>
-      <div className="container mx-auto px-5 h-24 border-b flex items-center justify-between">
+    <div className="h-24 border-b flex items-center">
+      <div className="container mx-auto px-5 flex items-center justify-between">
         <Logo />
         <div className="w-full hidden xl:flex justify-between">
           <DesktopNavbarItems categoriesItems={categoriesItems} />
@@ -19,6 +19,6 @@ export default function Navbar() {
           <MobileNavbar categoriesItems={categoriesItems} iconsItems={iconsItems} />
         </div>
       </div>
-    </>
+    </div>
   );
 }

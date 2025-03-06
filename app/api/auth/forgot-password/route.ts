@@ -3,11 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/db/prisma";
 import { formSchema } from "@/app/auth/forgot-password/_schema";
 import {
-  generateConfirmationLink,
-  generateConfirmationToken,
+  generateLink,
+  generateToken,
   replaceVariables,
   sendEmail,
 } from "@/app/api/auth/helpers";
+
+const BASE_URL = `${process.env.NEXT_PUBLIC_APP_URL}/auth/password-reset` as string;
 
 export async function POST(req: NextRequest) {
   try {
@@ -52,10 +54,10 @@ export async function POST(req: NextRequest) {
       throw new Error("Темплейтът не е валиден");
     }
 
-    const forgotPasswordToken = await generateConfirmationToken(user.email);
-    const forgotPasswordLink = generateConfirmationLink(forgotPasswordToken);
+    const forgotPasswordToken = await generateToken(user.email);
+    const forgotPasswordLink = generateLink(BASE_URL, forgotPasswordToken);
 
-    const updatedUser = await prisma.user.update({
+    await prisma.user.update({
       where: { email: data.email },
       data: {
         forgotPasswordToken: forgotPasswordToken,
@@ -64,7 +66,8 @@ export async function POST(req: NextRequest) {
 
     const variables = {
       link: forgotPasswordLink,
-      name: data.name,
+      name: user.name as string,
+      website_name: process.env.NEXT_PUBLIC_APP_NAME as string,
       support_phone: process.env.SUPPORT_PHONE as string,
       support_email: process.env.SUPPORT_EMAIL as string,
       website: process.env.NEXT_PUBLIC_APP_URL as string,

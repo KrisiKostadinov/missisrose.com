@@ -10,7 +10,7 @@ type Props = {
 export default function PageButton({ name, icon, ...props }: Props) {
   return (
     <button
-      className="flex items-center gap-3 cursor-pointer py-3 px-5 rounded text-white bg-primary hover:bg-black duration-200 focus:bg-gray-400"
+      className="flex items-center gap-3 cursor-pointer py-3 px-5 rounded text-white bg-primary hover:bg-black duration-200 focus:bg-gray-400 disabled:pointer-events-none disabled:opacity-50"
       {...props}
     >
       <ClientIcon name={icon} />

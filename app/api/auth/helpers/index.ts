@@ -3,7 +3,6 @@ import { URLSearchParams } from "url";
 import nodemailer from "nodemailer";
 
 const SECRET_KEY = process.env.SECRET_EMAIL_TOKEN_KEY as string;
-const BASE_URL = `${process.env.NEXT_PUBLIC_APP_URL}/confirm_email` as string;
 import { Algorithm } from "jsonwebtoken";
 
 const HASH_ALOGOROTHM = process.env.HASH_ALOGOROTHM as Algorithm;
@@ -13,7 +12,7 @@ type TokenPayload = {
   exp: number;
 };
 
-export function generateConfirmationToken(email: string): string {
+export function generateToken(email: string): string {
   const payload: TokenPayload = {
     email,
     exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // Валидност 24 часа
@@ -21,9 +20,17 @@ export function generateConfirmationToken(email: string): string {
   return jwt.sign(payload, SECRET_KEY, { algorithm: HASH_ALOGOROTHM });
 }
 
-export function generateConfirmationLink(token: string): string {
+export function decodeToken(token: string) {
+  const decodedData = jwt.verify(token, SECRET_KEY);
+  if (!decodedData) {
+    return null;
+  }
+  return decodedData;
+}
+
+export function generateLink(baseUrl: string, token: string): string {
   const params = new URLSearchParams({ token });
-  return `${BASE_URL}?${params.toString()}`;
+  return `${baseUrl}?${params.toString()}`;
 }
 
 export function replaceVariables(

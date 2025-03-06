@@ -4,11 +4,13 @@ import bcrypt from "bcryptjs";
 import { formSchema } from "@/app/auth/register/_schema";
 import { prisma } from "@/db/prisma";
 import {
-  generateConfirmationLink,
-  generateConfirmationToken,
+  generateLink,
+  generateToken,
   replaceVariables,
   sendEmail,
 } from "@/app/api/auth/helpers";
+
+const BASE_URL = `${process.env.NEXT_PUBLIC_APP_URL}/confirm_email` as string;
 
 export async function POST(req: NextRequest) {
   if (req.method !== "POST") {
@@ -53,10 +55,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const emailVerificationToken = await generateConfirmationToken(data.email);
-    const emailVerificationLink = generateConfirmationLink(
-      emailVerificationToken
-    );
+    const emailVerificationToken = await generateToken(data.email);
+    const emailVerificationLink = generateLink(BASE_URL, emailVerificationToken);
 
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(data.password, salt);

@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 import { prisma } from "@/db/prisma";
 import { formSchema } from "@/app/auth/login/_schema";
-import { generateConfirmationToken } from "@/app/api/auth/helpers";
+import { generateToken } from "@/app/api/auth/helpers";
 import { createSession } from "@/lib/session";
 
 export async function POST(req: NextRequest) {
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const token = generateConfirmationToken(user.email);
+  const token = generateToken(user.email);
 
   await createSession({ email: user.email, id: user.id, password: user.password });
 

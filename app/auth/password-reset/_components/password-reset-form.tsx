@@ -6,7 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
-import { FormSchema, formSchema } from "@/app/auth/forgot-password/_schema";
+import { FormSchema, formSchema } from "@/app/auth/password-reset/_schema";
 import {
   Form,
   FormControl,
@@ -22,22 +22,21 @@ import { Separator } from "@/components/ui/separator";
 import PageLink from "@/app/_components/page-link";
 import PageButton from "@/app/_components/page-button";
 
-export default function ForgotPasswordForm() {
-  const [submitted, setSubmitted] = useState<boolean>(false);
+export default function PasswordResetForm() {
   const [loading, setLoading] = useState<boolean>(false);
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      password: "",
+      cpassword: "",
     },
   });
 
   const onSubmit = async (values: FormSchema) => {
     try {
       setLoading(true);
-      await axios.post("/api/auth/forgot-password", values);
-      toast.success("Линкът беше изпратен.");
-      setSubmitted(true);
+      await axios.post("/api/auth/password-reset", values);
+      toast.success("Паролата беше променена.");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message);
@@ -51,44 +50,49 @@ export default function ForgotPasswordForm() {
 
   return (
     <AuthWrapper>
-      <h1 className="text-2xl font-semibold">Забравена парола</h1>
+      <h1 className="text-2xl font-semibold">Смяна на паролата</h1>
       <Separator className="my-5" />
-      {submitted && (
-        <>
-          <div className="bg-green-100 p-5 rounded">
-            Линкът беше изпратен. Моля, проверете пощата си, за да смените
-            паролата.
-          </div>
-          <Separator className="my-5" />
-        </>
-      )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="email"
+            name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Имейл</FormLabel>
+                <FormLabel>Нова парола</FormLabel>
                 <FormControl>
                   <Input
-                    type="email"
-                    placeholder="Въведете валиден имейл адрес"
+                    type="password"
+                    placeholder="Въведете нова сигурна парола"
                     {...field}
                     disabled={loading}
                   />
                 </FormControl>
-                <FormDescription>
-                  Въведете имейл адресът, с който сте създали профила си в този
-                  онлайн магазин.
-                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Потвърдете на паролата</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Потвърдете паролата си тук"
+                    {...field}
+                    disabled={loading}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           <div>
             <PageButton
-              name={loading ? "Линкът се изпраща..." : "Изпращане на линк"}
+              name="Смяна на паролата"
               icon="SaveIcon"
               disabled={loading}
             />
