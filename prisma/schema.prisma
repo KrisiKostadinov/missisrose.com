@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Status {
+  PUBLISHED
+  DRAFT
+}
+
 model User {
   id                     Int      @id @default(autoincrement())
   email                  String   @unique
@@ -39,6 +44,8 @@ model Category {
   description String?    @db.Text
   title       String?
   image       String?
+  status      Status     @default(DRAFT)
+  places      Json
   parentId    Int?
   parent      Category?  @relation("CategoryToParent", fields: [parentId], references: [id])
   children    Category[] @relation("CategoryToParent")
