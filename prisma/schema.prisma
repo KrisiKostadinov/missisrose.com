@@ -31,3 +31,18 @@ model Template {
 
   @@map("templates")
 }
+
+model Category {
+  id          Int        @id @default(autoincrement())
+  name        String
+  slug        String     @unique
+  description String?    @db.Text
+  title       String?
+  image       String?
+  parentId    Int?
+  parent      Category?  @relation("CategoryToParent", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryToParent")
+  createdAt   DateTime   @default(now()) @map("created_at")
+
+  @@map("categories")
+}
