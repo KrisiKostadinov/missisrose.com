@@ -31,7 +31,12 @@ export function getIconsItems(session: AuthSession | null) {
     {
       name: "Количка",
       href: "/cart",
-      icon: "ShoppingBagIcon",
+      icon: "ShoppingCart",
+    },
+    {
+      name: "Любими",
+      href: "/favorites",
+      icon: "Heart",
     },
   ];
 

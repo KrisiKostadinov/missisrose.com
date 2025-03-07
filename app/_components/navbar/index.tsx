@@ -15,11 +15,11 @@ export default function Navbar({ session }: Props) {
   const iconsItems = getIconsItems(session);
 
   return (
-    <div className="h-24 border-b flex items-center">
+    <div className="h-20 border-b flex items-center">
       <div className="container mx-auto px-5 flex items-center justify-between">
         <Logo />
-        <div className="w-full hidden xl:flex justify-between">
-          <DesktopNavbarItems categoriesItems={categoriesItems} />
+        <div className="w-full hidden xl:flex items-center justify-between">
+          <DesktopNavbarItems />
           <DesktopNavbarIcons iconsItems={iconsItems} />
         </div>
         <div className="block xl:hidden">
