@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { URLSearchParams } from "url";
 import nodemailer from "nodemailer";
 
@@ -25,7 +25,7 @@ export function decodeToken(token: string) {
   if (!decodedData) {
     return null;
   }
-  return decodedData;
+  return decodedData as JwtPayload;
 }
 
 export function generateLink(baseUrl: string, token: string): string {

@@ -8,7 +8,7 @@ import {
   generateToken,
   replaceVariables,
   sendEmail,
-} from "@/app/api/auth/helpers";
+} from "@/lib/helpers";
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_APP_URL}/confirm_email` as string;
 

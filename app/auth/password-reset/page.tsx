@@ -3,10 +3,10 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/db/prisma";
 import Header from "@/app/_components/header";
 import PasswordResetForm from "@/app/auth/password-reset/_components/password-reset-form";
-import { decodeToken } from "@/app/api/auth/helpers";
+import { decodeToken } from "@/lib/helpers";
 
 type Props = {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function PasswordResetPage({ searchParams }: Props) {

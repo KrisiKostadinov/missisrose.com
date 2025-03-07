@@ -3,7 +3,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
@@ -24,7 +23,6 @@ import PageLink from "@/app/_components/page-link";
 import PageButton from "@/app/_components/page-button";
 
 export default function LoginForm() {
-  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -38,7 +36,7 @@ export default function LoginForm() {
     try {
       setLoading(true);
       await axios.post("/api/auth/login", values);
-      router.push("/");
+      window.location.href = "/";
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message);

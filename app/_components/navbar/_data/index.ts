@@ -1,3 +1,4 @@
+import { AuthSession } from "@/types";
 import LucideIcons from "lucide-react";
 
 export type NavbarItem = {
@@ -25,15 +26,28 @@ export const categoriesItems: NavbarItem[] = [
   },
 ];
 
-export const iconsItems: NavbarItem[] = [
-  {
-    name: "Количка",
-    href: "/cart",
-    icon: "ShoppingBagIcon",
-  },
-  {
-    name: "Акаунт",
-    href: "/account",
-    icon: "UserIcon",
+export function getIconsItems(session: AuthSession | null) {
+  const iconsItems: NavbarItem[] = [
+    {
+      name: "Количка",
+      href: "/cart",
+      icon: "ShoppingBagIcon",
+    },
+  ];
+
+  if (session) {
+    iconsItems.push({
+      name: "Акаунт",
+      href: "/account",
+      icon: "UserIcon",
+    });
+  } else {
+    iconsItems.push({
+      name: "Вход",
+      href: "/auth/login",
+      icon: "LogInIcon",
+    });
   }
-];
+
+  return iconsItems;
+}

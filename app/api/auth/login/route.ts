@@ -3,8 +3,9 @@ import bcrypt from "bcryptjs";
 
 import { prisma } from "@/db/prisma";
 import { formSchema } from "@/app/auth/login/_schema";
-import { generateToken } from "@/app/api/auth/helpers";
+import { generateToken } from "@/lib/helpers";
 import { createSession } from "@/lib/session";
+import { AuthSession } from "@/types";
 
 export async function POST(req: NextRequest) {
   if (req.method !== "POST") {
@@ -51,7 +52,13 @@ export async function POST(req: NextRequest) {
 
   const token = generateToken(user.email);
 
-  await createSession({ email: user.email, id: user.id, password: user.password });
+  const authSession: AuthSession = {
+    email: user.email,
+    id: user.id,
+    password: user.password,
+  };
+
+  await createSession("auth", authSession);
 
   return NextResponse.json({ token }, { status: 200 });
 }

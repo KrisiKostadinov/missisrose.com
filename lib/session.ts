@@ -26,16 +26,16 @@ export async function decrypt(session: string | undefined = "") {
     });
     return payload;
   } catch (error) {
-    console.log("Failed to verify session");
+    console.log("Failed to verify session", error);
   }
 }
 
-export async function createSession(payload: SessionPayload) {
+export async function createSession(name: string, payload: SessionPayload) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const session = await encrypt(payload);
   const cookieStore = await cookies();
 
-  cookieStore.set("session", session, {
+  cookieStore.set(name, session, {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
@@ -44,7 +44,12 @@ export async function createSession(payload: SessionPayload) {
   });
 }
 
-export async function deleteSession() {
+export async function deleteSession(name: string) {
   const cookieStore = await cookies();
-  cookieStore.delete("session");
+  cookieStore.delete(name);
+}
+
+export async function getSession(name: string) {
+  const cookieStore = await cookies();
+  return cookieStore.get(name);
 }

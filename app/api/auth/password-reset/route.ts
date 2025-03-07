@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { prisma } from "@/db/prisma";
 import { formSchema } from "@/app/auth/password-reset/_schema";
-import { decodeToken } from "../helpers";
+import { decodeToken } from "../../../../lib/helpers";
 import bcrypt from "bcryptjs";
 
 export async function POST(req: NextRequest) {
