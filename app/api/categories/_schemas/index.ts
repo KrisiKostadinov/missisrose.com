@@ -50,3 +50,11 @@ export const categoryPlaceFormSchema = z.object({
 });
 
 export type CategoryPlaceFormSchema = z.infer<typeof categoryPlaceFormSchema>;
+
+// parent schema
+export const categoryParentFormSchema = z.object({
+  id: z.coerce.number({ message: "Невалиден 'id' на категория" }),
+  parent_id: z.coerce.number({ message: "Моля, добавете 'id' на родителска категория." }),
+});
+
+export type CategoryParentFormSchema = z.infer<typeof categoryParentFormSchema>;
