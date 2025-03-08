@@ -1,32 +1,55 @@
 "use client";
 
+import { useState } from "react";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import SaveForm from "@/app/dashboard/categories/_components/save-form";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import PageButton from "@/app/_components/page-button";
+import SaveForm from "@/app/dashboard/categories/_components/save-form";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+
+const message =
+  "Важно! Промените няма да бъдат запазени. Сигурни ли сте, че искате да затворите този формуляр?";
 
 export default function SavePopover() {
+  const [open, setOpen] = useState(false);
+
+  const onHide = () => {
+    if (open && confirm(message)) {
+      setOpen(!open);
+    }
+  };
+
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <Dialog open={open} onOpenChange={onHide}>
+      <DialogTrigger asChild>
         <PageButton
-          className="max-sm:w-full max-sm:mt-5"
           name="Създаване"
           icon="PlusIcon"
+          onClick={() => setOpen(true)}
         />
-      </PopoverTrigger>
-      <PopoverContent className="p-0 w-full max-w-xl" align="end">
-        <ScrollArea className="h-[400px] whitespace-wrap">
-          <div className="p-5">
-            <SaveForm />
+      </DialogTrigger>
+      <DialogContent className="w-full min-w-full h-full p-0">
+        <ScrollArea className="w-full max-h-screen">
+          <div className="p-5 space-y-2">
+            <DialogTitle>Създаване на нова категория</DialogTitle>
+            <DialogDescription>
+              Всички полета, който са означени със звездичка са задължителни!
+            </DialogDescription>
           </div>
-          <ScrollBar orientation="vertical" />
+          <Separator />
+          <div className="py-5">
+            <SaveForm />
+            <ScrollBar orientation="vertical" />
+          </div>
         </ScrollArea>
-      </PopoverContent>
-    </Popover>
+      </DialogContent>
+    </Dialog>
   );
 }

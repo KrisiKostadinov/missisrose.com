@@ -3,6 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 import {
   formSchema,
@@ -20,7 +22,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { generateSlug } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -30,9 +31,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 
 export default function SaveForm() {
   const form = useForm<FormSchema>({
@@ -42,19 +40,17 @@ export default function SaveForm() {
       slug: "",
       title: "",
       description: "",
-      places: "HOME_HEADER",
+      places: ["ALL"],
       status: "DRAFT",
     },
   });
   const [name, setName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter();
 
   async function onSubmit(values: FormSchema) {
     try {
       setLoading(true);
       await axios.post("/api/categories", values);
-      router.push("/dashboard/categories");
       toast.success("Категорията беше запазена.");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -69,12 +65,7 @@ export default function SaveForm() {
 
   return (
     <Form {...form}>
-      <div className="text-2xl">Добавяне на нова категория</div>
-      <p className="text-muted-foreground">
-        Всички полета, който са означени със звездичка са задължителни!
-      </p>
-      <Separator className="my-5" />
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="px-5 space-y-10">
         <FormField
           control={form.control}
           name="name"
@@ -185,6 +176,29 @@ export default function SaveForm() {
                 Ако приложите статусът на (Публикувано), ще можете да виждате
                 тази категория в зоната за клиенти на магазина.
               </FormDescription>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="title"
+          disabled={loading}
+          render={({ field }) => (
+            <FormItem
+              onChange={(event) =>
+                setName((event.target as HTMLInputElement)?.value)
+              }
+            >
+              <FormLabel>Мета заглавие</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="Мета заглавие на категорията" />
+              </FormControl>
+              <FormDescription>
+                Този текст ще се показва в клиентската зона при приближаване на
+                курсора на мишката върху името на категорията.
+              </FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />
