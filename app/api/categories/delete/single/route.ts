@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { prisma } from "@/db/prisma";
 import { allowedActionMethod } from "@/app/api/_helpers";
 
 export async function DELETE(request: NextRequest) {
@@ -12,14 +13,23 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Missing ID" }, { status: 400 });
     }
 
-    console.log(`Deleting item with ID: ${id}`);
+    const category = await prisma.category.deleteMany({
+      where: { id: parseInt(id) },
+    });
 
-    // Тук трябва да добавиш логиката за изтриване (примерно в база данни)
-    // Пример:
-    // await db.deleteItem(id);
+    if (!category) {
+      return NextResponse.json(
+        { error: "Тази категория не е намерена." },
+        { status: 404 }
+      );
+    }
 
     return NextResponse.json({ message: `Item with ID ${id} deleted` });
   } catch (error) {
-    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+    console.log(error);
+    return NextResponse.json(
+      { error: "Something went wrong" },
+      { status: 500 }
+    );
   }
 }

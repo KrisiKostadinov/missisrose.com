@@ -23,7 +23,10 @@ export async function GET(request: NextRequest) {
 
     if (sort !== "asc" && sort !== "desc") {
       return NextResponse.json(
-        { message: "Невалидни параметри за сортиране. Валидните са: (asc, desc)" },
+        {
+          message:
+            "Невалидни параметри за сортиране. Валидните са: (asc, desc)",
+        },
         { status: 400 }
       );
     }
@@ -32,13 +35,27 @@ export async function GET(request: NextRequest) {
       skip,
       take: limit,
       orderBy: { createdAt: sort },
+      include: {
+        children: {
+          include: {
+            children: true,
+          }
+        }
+      },
     });
+
+    const childrenIds = categories.flatMap((category) =>
+      category.children.map((child) => child.id)
+    );
+    const filteredCategories = categories.filter(
+      (category) => !childrenIds.includes(category.id)
+    );
 
     const total = await prisma.category.count();
 
     return NextResponse.json(
       {
-        categories,
+        categories: filteredCategories,
         pagination: {
           total,
           page,
